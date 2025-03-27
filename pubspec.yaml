@@ -1,14 +1,12 @@
 name: duration_format
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-repository: https://github.com/Calebh101
+description: A simple package to format a Duration object into a string.
+version: 0.0.0
+repository: https://github.com/Calebh101/duration_format
 
 environment:
   sdk: ^3.5.4
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^4.0.0

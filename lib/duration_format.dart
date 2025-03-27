@@ -74,20 +74,43 @@ String _format(Duration duration, DurationFormat formatter) {
   Map times = _values(duration, formatter);
   List values = [];
 
-  if (formatter.showMilliseconds) values.add({"key": "milliseconds", "value": times["milliseconds"]});
-  if (formatter.showSeconds) values.add({"key": "seconds", "value": times["seconds"]});
-  values.add({"key": "milliseconds", "value": times["minutes"]});
-  if (formatter.showHours) values.add({"key": "hours", "value": times["hours"]});
-  if (formatter.showDays) values.add({"key": "days", "value": times["days"]});
+  bool showDays = formatter.showDays && times["days"] > 0;
+  bool showHours = formatter.showHours && times["hours"] > 0;
+  bool showSeconds = formatter.showSeconds;
+  bool showMilliseconds = formatter.showMilliseconds is DurationFormatMillisecondsClockMode ? formatter.showMilliseconds != DurationFormatMillisecondsClockMode.hide : formatter.showMilliseconds == true;
+  
+  if (showDays) values.add({"key": "days", "value": "${times["days"]}"});
+  if (showHours) values.add({"key": "hours", "value": "${times["hours"]}".padLeft(showDays && formatter.mode == 1 ? 2 : 0, "0")});
+  values.add({"key": "minutes", "value": "${times["minutes"]}".padLeft(showHours && formatter.mode == 1 ? 2 : 0, "0")});
+  if (showSeconds) values.add({"key": "seconds", "value": "${times["seconds"]}".padLeft(2, "0")});
+  if (showMilliseconds) values.add({"key": "milliseconds", "value": "${times["minutes"]}".padLeft(2, "0")});
 
-  if (formatter.mode == 1) {} else if (formatter.mode == 2) {} else {
+  if (formatter.mode == 1) {
+    return values.map((item) => item["value"]).join(":");
+  } else if (formatter.mode == 2) {
+    List stringValues = [];
+    for (var entry in values.asMap().entries) {
+      int index = entry.key;
+      String value = entry.value["value"];
+      String key = entry.value["key"];
+      if (index == (values.length - 1)) { // last item, respect finalPhraseMode
+        switch (formatter.finalPhraseMode) {
+          case DurationFormatFinalPhraseMode.and || DurationFormatFinalPhraseMode.commaAnd: stringValues.add("and $value $key");
+          case DurationFormatFinalPhraseMode.comma: stringValues.add("$value $key");
+        }
+      } else {
+        stringValues.add("$value $key${((index == (values.length - 2)) && formatter.finalPhraseMode == DurationFormatFinalPhraseMode.and) ? "" : ","}");
+      }
+    }
+
+    return stringValues.join(" ");
+  } else {
     throw Exception("The formatter \"mode\" property is not a valid mode in function _format().");
   }
 }
 
 Map _values(Duration duration, DurationFormat formatter) {
-  int time = duration.inMilliseconds;
-  int milliseconds = time - (duration.inSeconds * 1000);
+  int milliseconds = duration.inMilliseconds - (duration.inSeconds * 1000);
   int seconds = duration.inSeconds - (duration.inMinutes * 60);
   int minutes = formatter.showHours ? (duration.inMinutes % 60) : duration.inMinutes;
   int hours = formatter.showDays ? (duration.inHours % 24) : duration.inHours;
