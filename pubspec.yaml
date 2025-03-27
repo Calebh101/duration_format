@@ -1,5 +1,5 @@
 name: duration_format
-description: A simple package to format a Duration object into a string.
+description: A simple package to format a Duration object into a human-readable string.
 version: 0.0.0
 repository: https://github.com/Calebh101/duration_format
 
