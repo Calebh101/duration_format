@@ -1,6 +1,6 @@
 name: duration_format
 description: A simple package to format a Duration object into a human-readable string.
-version: 0.0.0
+version: 0.0.1
 repository: https://github.com/Calebh101/duration_format
 
 environment:

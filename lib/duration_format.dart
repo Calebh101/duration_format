@@ -92,7 +92,7 @@ class DurationFormat {
       this.millisecondDigits = 2}) {
     mode = 1;
     if (showMilliseconds.runtimeType != DurationFormatMillisecondsClockMode) {
-      throw Exception(
+      throw DurationFormatException(
           "showMilliseconds must be of type \"DurationFormatMillisecondsClockMode\" in DurationFormat.clock().");
     }
 
@@ -100,15 +100,16 @@ class DurationFormat {
         showMilliseconds:
             showMilliseconds != DurationFormatMillisecondsClockMode.hide);
     if (millisecondDigits < 2 || millisecondDigits > 3) {
-      throw Exception(
+      throw DurationFormatException(
           "millisecondsDigits must be a valid integer between 2 and 3 (inclusive).");
     }
     if (list.where((value) => value).length < 2) {
-      throw Exception(
+      throw DurationFormatException(
           "At least 2 time nodes need to be shown in the formatter.");
     }
     if (_invalidSelection(list)) {
-      throw Exception("Invalid list of time nodes based on boolean values.");
+      throw DurationFormatException(
+          "Invalid list of time nodes based on boolean values.");
     }
   }
 
@@ -126,17 +127,18 @@ class DurationFormat {
       this.millisecondDigits = 3}) {
     mode = 2;
     if (showMilliseconds.runtimeType != bool) {
-      throw Exception(
+      throw DurationFormatException(
           "showMilliseconds must be of type \"bool\" in DurationFormat.pretty().");
     }
     if (millisecondDigits < 2 || millisecondDigits > 3) {
-      throw Exception(
+      throw DurationFormatException(
           "millisecondsDigits must be a valid integer between 2 and 3 (inclusive).");
     }
 
     List list = _generateList(showMilliseconds: showMilliseconds);
     if (_invalidSelection(list)) {
-      throw Exception("Invalid list of time nodes based on boolean values.");
+      throw DurationFormatException(
+          "Invalid list of time nodes based on boolean values.");
     }
   }
 
@@ -231,8 +233,8 @@ String _format(Duration duration, DurationFormat formatter) {
 
     return stringValues.join(" ");
   } else {
-    throw Exception(
-        "The formatter \"mode\" property is not a valid mode in function _format().");
+    throw StateError(
+        "The formatter's \"mode\" property is not a valid mode in function _format().");
   }
 }
 
@@ -255,4 +257,13 @@ Map _values(Duration duration, DurationFormat formatter) {
     "hours": hours,
     "days": days,
   };
+}
+
+/// DurationFormatException is called when there is an exception with how you setup the formatter (a [DurationFormat] object).
+class DurationFormatException implements Exception {
+  /// Message of the exception.
+  final String message;
+
+  /// [message] is required.
+  DurationFormatException(this.message);
 }
