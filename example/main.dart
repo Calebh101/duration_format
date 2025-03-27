@@ -4,8 +4,21 @@ import 'package:duration_format/duration_format.dart';
 
 void main(List<String> args) {
   int milliseconds = 0;
-  DurationFormat prettyFormat = DurationFormat.pretty(showDays: true, showHours: true, showMinutes: true, showSeconds: true, showMilliseconds: false, millisecondDigits: 2, finalPhraseMode: DurationFormatFinalPhraseMode.and);
-  DurationFormat clockFormat = DurationFormat.clock(showDays: true, showHours: true, showMinutes: true, showSeconds: true, showMilliseconds: DurationFormatMillisecondsClockMode.colon, millisecondDigits: 2);
+  DurationFormat prettyFormat = DurationFormat.pretty(
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
+      showMilliseconds: false,
+      millisecondDigits: 2,
+      finalPhraseMode: DurationFormatFinalPhraseMode.and);
+  DurationFormat clockFormat = DurationFormat.clock(
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
+      showMilliseconds: DurationFormatMillisecondsClockMode.colon,
+      millisecondDigits: 2);
 
   print("clockFormat: $clockFormat");
   print("prettyFormat: $prettyFormat");
