@@ -1,4 +1,4 @@
-/// Library for duration_format package.
+/// Main library for the duration_format package.
 library duration_format;
 
 /// This extension goes onto Duration to provide it with methods to format with.
@@ -10,7 +10,7 @@ extension DurationFormatExtension on Duration {
 }
 
 /// Judges how to render the milliseconds part of the clock format.
-/// hide: Don't show milliseconds.
+/// hide: Don't show milliseconds. (7:03)
 /// colon: Show milliseconds using a colon. (7:03:47)
 /// semicolon: Show milliseconds using a semicolon. (7:03;47)
 enum DurationFormatMillisecondsClockMode {
@@ -111,6 +111,11 @@ class DurationFormat {
       throw DurationFormatException(
           "Invalid list of time nodes based on boolean values.");
     }
+  }
+
+  @override
+  String toString() {
+    return "DurationFormat.${mode == 1 ? "clock" : "pretty"}(showMilliseconds: $showMilliseconds, showSeconds: $showSeconds, showMinutes: $showMinutes, showHours: $showHours, showDays: $showDays, millisecondsDigits: $millisecondDigits${mode == 1 ? "" : ", finalPhraseMode: $finalPhraseMode"})";
   }
 
   /// Format the [Duration] into a human-readable string.
@@ -266,4 +271,9 @@ class DurationFormatException implements Exception {
 
   /// [message] is required.
   DurationFormatException(this.message);
+
+  @override
+  String toString() {
+    return "DurationFormatException: $message";
+  }
 }
